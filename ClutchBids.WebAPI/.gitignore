@@ -1,0 +1,94 @@
+# Build results
+bin/
+obj/
+Debug/
+Release/
+*.dll
+*.exe
+*.pdb
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln.VisualState.xml
+
+# Visual Studio cache/options
+.vs/
+.vscode/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local history
+.history/
+
+# User settings
+appsettings.Development.json
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+
+# Entity Framework
+Migrations/
+
+# NuGet
+.nupkg
+.snupkg
+packages/
+.nuget/
+
+# Test Results
+TestResults/
+*.trx
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Upload directories
+wwwroot/uploads/
+uploads/
+
+# IDE specific files
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Visual Studio for Mac
+.vs/
+.DS_Store
+
+# Rider
+.idea/
+*.sln.iml
+riderModule.iml
+
+# Azure
+ConnectionStrings.json
+
+# Certificate files (development)
+*.pem
+*.key
+*.crt
+
+# Docker
+docker-compose.override.yml
