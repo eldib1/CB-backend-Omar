@@ -22,6 +22,7 @@ public class CarListing : BaseEntity
     public bool RequiresValidation { get; set; }
     public string ListingCode { get; set; }
     public long? SaleProofFileId { get; set; }
+    public bool IsFeatured { get; set; }
 
 
     // Navigation properties

@@ -85,7 +85,13 @@ builder.Services.AddLogging(config =>
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
 builder.Services
-    .AddAuthentication("Bearer")
+    .AddAuthentication(options =>
+    {
+        // AddIdentity registers cookie auth as the default; force JWT bearer for the API.
+        options.DefaultAuthenticateScheme = "Bearer";
+        options.DefaultChallengeScheme = "Bearer";
+        options.DefaultScheme = "Bearer";
+    })
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters

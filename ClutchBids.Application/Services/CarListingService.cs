@@ -178,6 +178,8 @@ public class CarListingService : ICarListingService
             .Include(cl => cl.Car)
             .Include(cl => cl.Seller)
             .Include(cl => cl.Images)
+                .ThenInclude(img => img.File)
+            .Include(cl => cl.PriceOffers)
             .Where(cl => cl.Status == CarListingStatus.Active);
 
         if (!string.IsNullOrEmpty(searchDto.Make))
@@ -214,7 +216,8 @@ public class CarListingService : ICarListingService
             query = query.Where(cl => cl.Seller != null && cl.Seller.State == searchDto.State);
 
         var pagedQuery = query
-            .OrderByDescending(cl => cl.ListedAt)
+            .OrderByDescending(cl => cl.IsFeatured)
+            .ThenByDescending(cl => cl.ListedAt)
             .Skip((searchDto.PageNumber - 1) * searchDto.PageSize)
             .Take(searchDto.PageSize);
 
@@ -232,6 +235,48 @@ public class CarListingService : ICarListingService
             PageNumber = searchDto.PageNumber,
             PageSize = searchDto.PageSize
         };
+    }
+
+    public async Task<CarListingDto?> GetFeaturedListingAsync()
+    {
+        var listing = await _unitOfWork.CarListings
+            .Query()
+            .Include(cl => cl.Car)
+            .Include(cl => cl.Seller)
+            .Include(cl => cl.Images)
+                .ThenInclude(img => img.File)
+            .Include(cl => cl.PriceOffers)
+            .Where(cl => cl.Status == CarListingStatus.Active && cl.IsFeatured)
+            .OrderByDescending(cl => cl.UpdatedAt ?? cl.CreatedAt)
+            .FirstOrDefaultAsync();
+
+        return listing == null ? null : _mapper.Map<CarListingDto>(listing);
+    }
+
+    public async Task<bool> SetFeaturedAsync(long id, bool featured)
+    {
+        var listing = await _unitOfWork.CarListings.GetByIdAsync(id);
+        if (listing == null)
+            return false;
+
+        if (featured)
+        {
+            // Only one listing is featured at a time
+            var current = await _unitOfWork.CarListings
+                .Query()
+                .Where(cl => cl.IsFeatured && cl.Id != id)
+                .ToListAsync();
+            foreach (var other in current)
+            {
+                other.IsFeatured = false;
+                await _unitOfWork.CarListings.UpdateAsync(other);
+            }
+        }
+
+        listing.IsFeatured = featured;
+        await _unitOfWork.CarListings.UpdateAsync(listing);
+        await _unitOfWork.SaveChangesAsync();
+        return true;
     }
 
     public async Task<dynamic?> GetListingDetailsAsync(long id, bool isAuthenticated)

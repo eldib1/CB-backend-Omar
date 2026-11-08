@@ -11,6 +11,7 @@ public class CarListingDto
     public string Model { get; set; } = string.Empty;
     public int Year { get; set; }
     public string Color { get; set; } = string.Empty;
+    public string EngineSize { get; set; } = string.Empty;
     public string FuelType { get; set; } = string.Empty;
     public string Transmission { get; set; } = string.Empty;
     public int Mileage { get; set; }
@@ -21,4 +22,5 @@ public class CarListingDto
     public List<string> ImageUrls { get; set; } = [];
     public DateTime? ListedAt { get; set; }
     public int? OfferCount { get; set; }
+    public bool IsFeatured { get; set; }
 }

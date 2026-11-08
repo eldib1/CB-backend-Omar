@@ -25,6 +25,39 @@ public class CarListingsController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("featured")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetFeaturedListing()
+    {
+        var result = await _carListingService.GetFeaturedListingAsync();
+        if (result == null)
+            return NotFound(new { message = "No featured listing" });
+
+        return Ok(result);
+    }
+
+    [HttpPost("{id}/feature")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
+    public async Task<IActionResult> FeatureListing(long id)
+    {
+        var result = await _carListingService.SetFeaturedAsync(id, true);
+        if (!result)
+            return NotFound(new { message = "Listing not found" });
+
+        return Ok(new { message = "Listing featured successfully" });
+    }
+
+    [HttpPost("{id}/unfeature")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
+    public async Task<IActionResult> UnfeatureListing(long id)
+    {
+        var result = await _carListingService.SetFeaturedAsync(id, false);
+        if (!result)
+            return NotFound(new { message = "Listing not found" });
+
+        return Ok(new { message = "Listing unfeatured successfully" });
+    }
+
     [HttpGet("{id}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetListingDetails(long id)

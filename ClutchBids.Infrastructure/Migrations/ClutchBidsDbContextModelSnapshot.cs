@@ -385,6 +385,9 @@ namespace ClutchBids.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ListedAt")
                         .HasColumnType("datetime2");
 

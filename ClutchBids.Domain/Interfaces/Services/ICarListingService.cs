@@ -14,6 +14,8 @@ public interface ICarListingService
     Task<IEnumerable<CarListingDto>> GetSellerListingsAsync(long sellerId);
     Task<IEnumerable<CarListingDto>> GetActiveListingsAsync();
     Task<dynamic> SearchListingsAsync(CarListingSearchDto searchDto);
+    Task<CarListingDto?> GetFeaturedListingAsync();
+    Task<bool> SetFeaturedAsync(long id, bool featured);
     Task<dynamic?> GetListingDetailsAsync(long id, bool isAuthenticated);
     Task<bool> SubmitListingForApprovalAsync(long id, long userId);
     Task<bool> ApproveListingAsync(long id, long userId);
